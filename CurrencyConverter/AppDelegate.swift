@@ -23,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
 		
+		navigationController.pushViewController(ViewController(), animated: true)
+		
 		return true
 	}
 
