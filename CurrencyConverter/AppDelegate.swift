@@ -18,12 +18,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		let window = UIWindow()
 		let navigationController = UINavigationController()
+		navigationController.viewControllers = [
+			CurrencyConverterViewController()
+		]
 		
 		self.window = window
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
-		
-		navigationController.pushViewController(ViewController(), animated: true)
 		
 		return true
 	}

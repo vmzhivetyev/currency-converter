@@ -7,14 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13D3DD55231B6C190033394F /* CurrencyConverterViewControllerOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D3DD54231B6C190033394F /* CurrencyConverterViewControllerOutput.swift */; };
+		13D3DD5C231B77D60033394F /* CurrencyConverterPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D3DD5B231B77D60033394F /* CurrencyConverterPresenter.swift */; };
+		13D3DD60231B7D0D0033394F /* CurrencyConverterPresenterOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D3DD5F231B7D0D0033394F /* CurrencyConverterPresenterOutput.swift */; };
+		13D3DD65231B7F280033394F /* CurrencyConverterViewData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13D3DD64231B7F280033394F /* CurrencyConverterViewData.swift */; };
 		13E4F19223198D4700BDE8EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E4F19123198D4700BDE8EB /* AppDelegate.swift */; };
-		13E4F19423198D4700BDE8EB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E4F19323198D4700BDE8EB /* ViewController.swift */; };
+		13E4F19423198D4700BDE8EB /* CurrencyConverterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E4F19323198D4700BDE8EB /* CurrencyConverterViewController.swift */; };
 		13E4F19923198D4800BDE8EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13E4F19823198D4800BDE8EB /* Assets.xcassets */; };
 		13E4F19C23198D4800BDE8EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13E4F19A23198D4800BDE8EB /* LaunchScreen.storyboard */; };
 		13E4F1A723198D4800BDE8EB /* CurrencyConverterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E4F1A623198D4800BDE8EB /* CurrencyConverterTests.swift */; };
 		13F7723D2319A09100090B0F /* CurrencyInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F7723C2319A09100090B0F /* CurrencyInputView.swift */; };
 		13F7723F2319A5A900090B0F /* DatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F7723E2319A5A900090B0F /* DatePickerView.swift */; };
-		13F772412319AC7000090B0F /* UIElementsAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F772402319AC7000090B0F /* UIElementsAssembly.swift */; };
+		13F772452319B47D00090B0F /* DatePickerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F772442319B47D00090B0F /* DatePickerViewDelegate.swift */; };
+		13F772482319B60800090B0F /* CurrencyInputViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F772472319B60800090B0F /* CurrencyInputViewDelegate.swift */; };
+		13F7724D2319C0A800090B0F /* SumInputFieldFormatterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F7724C2319C0A800090B0F /* SumInputFieldFormatterDelegate.swift */; };
+		13F77252231B4F0900090B0F /* SumInputFieldFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13F77251231B4F0900090B0F /* SumInputFieldFormatter.swift */; };
 		E6E013888F4C4C3254364E4C /* Pods_CurrencyConverter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F781AA4DDB8F314C16BEAC0 /* Pods_CurrencyConverter.framework */; };
 		ECC57190D12673E3E03A794A /* Pods_CurrencyConverterTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D7AFD1467AB8CD1220DA29F /* Pods_CurrencyConverterTests.framework */; };
 /* End PBXBuildFile section */
@@ -31,9 +38,13 @@
 
 /* Begin PBXFileReference section */
 		066189A4F9354FFC0E886CE6 /* Pods-CurrencyConverterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyConverterTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CurrencyConverterTests/Pods-CurrencyConverterTests.release.xcconfig"; sourceTree = "<group>"; };
+		13D3DD54231B6C190033394F /* CurrencyConverterViewControllerOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterViewControllerOutput.swift; sourceTree = "<group>"; };
+		13D3DD5B231B77D60033394F /* CurrencyConverterPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterPresenter.swift; sourceTree = "<group>"; };
+		13D3DD5F231B7D0D0033394F /* CurrencyConverterPresenterOutput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterPresenterOutput.swift; sourceTree = "<group>"; };
+		13D3DD64231B7F280033394F /* CurrencyConverterViewData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterViewData.swift; sourceTree = "<group>"; };
 		13E4F18E23198D4700BDE8EB /* CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13E4F19123198D4700BDE8EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		13E4F19323198D4700BDE8EB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		13E4F19323198D4700BDE8EB /* CurrencyConverterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverterViewController.swift; sourceTree = "<group>"; };
 		13E4F19823198D4800BDE8EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		13E4F19B23198D4800BDE8EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		13E4F19D23198D4800BDE8EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -42,7 +53,10 @@
 		13E4F1A823198D4800BDE8EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		13F7723C2319A09100090B0F /* CurrencyInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputView.swift; sourceTree = "<group>"; };
 		13F7723E2319A5A900090B0F /* DatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerView.swift; sourceTree = "<group>"; };
-		13F772402319AC7000090B0F /* UIElementsAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIElementsAssembly.swift; sourceTree = "<group>"; };
+		13F772442319B47D00090B0F /* DatePickerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewDelegate.swift; sourceTree = "<group>"; };
+		13F772472319B60800090B0F /* CurrencyInputViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyInputViewDelegate.swift; sourceTree = "<group>"; };
+		13F7724C2319C0A800090B0F /* SumInputFieldFormatterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumInputFieldFormatterDelegate.swift; sourceTree = "<group>"; };
+		13F77251231B4F0900090B0F /* SumInputFieldFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SumInputFieldFormatter.swift; sourceTree = "<group>"; };
 		1D7AFD1467AB8CD1220DA29F /* Pods_CurrencyConverterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CurrencyConverterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E2883AC3AF3C0E174386B2E /* Pods-CurrencyConverter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyConverter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CurrencyConverter/Pods-CurrencyConverter.debug.xcconfig"; sourceTree = "<group>"; };
 		7F781AA4DDB8F314C16BEAC0 /* Pods_CurrencyConverter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CurrencyConverter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +95,50 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		13D3DD52231B6BED0033394F /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				13D3DD53231B6BF50033394F /* CurrencyConverter */,
+			);
+			name = Screens;
+			sourceTree = "<group>";
+		};
+		13D3DD53231B6BF50033394F /* CurrencyConverter */ = {
+			isa = PBXGroup;
+			children = (
+				13D3DD63231B7EFB0033394F /* Model */,
+				13D3DD5A231B76D90033394F /* Presenter */,
+				13D3DD58231B6C5B0033394F /* View */,
+			);
+			name = CurrencyConverter;
+			sourceTree = "<group>";
+		};
+		13D3DD58231B6C5B0033394F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				13E4F19323198D4700BDE8EB /* CurrencyConverterViewController.swift */,
+				13D3DD54231B6C190033394F /* CurrencyConverterViewControllerOutput.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		13D3DD5A231B76D90033394F /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				13D3DD5B231B77D60033394F /* CurrencyConverterPresenter.swift */,
+				13D3DD5F231B7D0D0033394F /* CurrencyConverterPresenterOutput.swift */,
+			);
+			name = Presenter;
+			sourceTree = "<group>";
+		};
+		13D3DD63231B7EFB0033394F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				13D3DD64231B7F280033394F /* CurrencyConverterViewData.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		13E4F18523198D4700BDE8EB = {
 			isa = PBXGroup;
 			children = (
@@ -104,14 +162,12 @@
 		13E4F19023198D4700BDE8EB /* CurrencyConverter */ = {
 			isa = PBXGroup;
 			children = (
-				13E4F19123198D4700BDE8EB /* AppDelegate.swift */,
-				13E4F19323198D4700BDE8EB /* ViewController.swift */,
-				13F772402319AC7000090B0F /* UIElementsAssembly.swift */,
-				13F7723C2319A09100090B0F /* CurrencyInputView.swift */,
-				13F7723E2319A5A900090B0F /* DatePickerView.swift */,
-				13E4F19823198D4800BDE8EB /* Assets.xcassets */,
 				13E4F19A23198D4800BDE8EB /* LaunchScreen.storyboard */,
+				13E4F19823198D4800BDE8EB /* Assets.xcassets */,
 				13E4F19D23198D4800BDE8EB /* Info.plist */,
+				13F77254231B655A00090B0F /* Presentation Layer */,
+				13F77253231B654F00090B0F /* Services */,
+				13F772422319B43700090B0F /* UI Elements */,
 			);
 			path = CurrencyConverter;
 			sourceTree = "<group>";
@@ -123,6 +179,59 @@
 				13E4F1A823198D4800BDE8EB /* Info.plist */,
 			);
 			path = CurrencyConverterTests;
+			sourceTree = "<group>";
+		};
+		13F772422319B43700090B0F /* UI Elements */ = {
+			isa = PBXGroup;
+			children = (
+				13F772462319B5E700090B0F /* CurrencyInput */,
+				13F772432319B46A00090B0F /* DatePicker */,
+			);
+			name = "UI Elements";
+			sourceTree = "<group>";
+		};
+		13F772432319B46A00090B0F /* DatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				13F7723E2319A5A900090B0F /* DatePickerView.swift */,
+				13F772442319B47D00090B0F /* DatePickerViewDelegate.swift */,
+			);
+			name = DatePicker;
+			sourceTree = "<group>";
+		};
+		13F772462319B5E700090B0F /* CurrencyInput */ = {
+			isa = PBXGroup;
+			children = (
+				13F7723C2319A09100090B0F /* CurrencyInputView.swift */,
+				13F772472319B60800090B0F /* CurrencyInputViewDelegate.swift */,
+			);
+			name = CurrencyInput;
+			sourceTree = "<group>";
+		};
+		13F7724E231B4CC000090B0F /* SumInputFieldFormatter */ = {
+			isa = PBXGroup;
+			children = (
+				13F77251231B4F0900090B0F /* SumInputFieldFormatter.swift */,
+				13F7724C2319C0A800090B0F /* SumInputFieldFormatterDelegate.swift */,
+			);
+			name = SumInputFieldFormatter;
+			sourceTree = "<group>";
+		};
+		13F77253231B654F00090B0F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				13F7724E231B4CC000090B0F /* SumInputFieldFormatter */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		13F77254231B655A00090B0F /* Presentation Layer */ = {
+			isa = PBXGroup;
+			children = (
+				13E4F19123198D4700BDE8EB /* AppDelegate.swift */,
+				13D3DD52231B6BED0033394F /* Screens */,
+			);
+			name = "Presentation Layer";
 			sourceTree = "<group>";
 		};
 		D1A7901739E00316F672966F /* Frameworks */ = {
@@ -306,11 +415,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				13E4F19423198D4700BDE8EB /* ViewController.swift in Sources */,
+				13E4F19423198D4700BDE8EB /* CurrencyConverterViewController.swift in Sources */,
+				13F77252231B4F0900090B0F /* SumInputFieldFormatter.swift in Sources */,
+				13D3DD55231B6C190033394F /* CurrencyConverterViewControllerOutput.swift in Sources */,
+				13D3DD65231B7F280033394F /* CurrencyConverterViewData.swift in Sources */,
+				13D3DD5C231B77D60033394F /* CurrencyConverterPresenter.swift in Sources */,
 				13F7723D2319A09100090B0F /* CurrencyInputView.swift in Sources */,
+				13F772482319B60800090B0F /* CurrencyInputViewDelegate.swift in Sources */,
 				13F7723F2319A5A900090B0F /* DatePickerView.swift in Sources */,
 				13E4F19223198D4700BDE8EB /* AppDelegate.swift in Sources */,
-				13F772412319AC7000090B0F /* UIElementsAssembly.swift in Sources */,
+				13D3DD60231B7D0D0033394F /* CurrencyConverterPresenterOutput.swift in Sources */,
+				13F772452319B47D00090B0F /* DatePickerViewDelegate.swift in Sources */,
+				13F7724D2319C0A800090B0F /* SumInputFieldFormatterDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
