@@ -10,14 +10,19 @@ import UIKit
 
 class CurrencyConversionService {
 	
+	struct Currency {
+		let isoCode : String
+		let name : String
+	}
+	
 	struct CurrencyConversionData {
 		let date : Date
 		let sum : Decimal
-		let fromCurrency : ConvertableCurrency
-		let toCurrency : ConvertableCurrency
+		let fromCurrency : Currency
+		let toCurrency : Currency
 	}
 	
-	struct ConversionResult {
+	private struct ConversionResult {
 		var fromCurrencyValue : Decimal = -1
 		var toCurrencyValue : Decimal = -1
 		
@@ -31,7 +36,7 @@ class CurrencyConversionService {
 			return fromCurrencyValue / toCurrencyValue
 		}
 		
-		var isFilled : Bool {
+		private var isFilled : Bool {
 			return fromCurrencyValue >= 0 && toCurrencyValue >= 0
 		}
 	}
@@ -77,11 +82,14 @@ extension CurrencyConversionService : CurrencyConversionServiceProtocol {
 extension CurrencyConversionService : CBRServiceDelegate {
 	func cbrService(_ cbrService: CBRService, didFetch currencies: [CBRService.Currency]) {
 		self.currenciesList = currencies
-		let list = currencies.map { ConvertableCurrency(isoCode: $0.isoCode, name: $0.name) }
+		let list = currencies.map { CurrencyConversionService.Currency(isoCode: $0.isoCode, name: $0.name) }
 		self.delegate?.currencyConversionService(self, didFetch: list)
 	}
 	
-	func cbrService(_ cbrService: CBRService, didFetch value: Decimal, for currency: CBRService.Currency) {
+	func cbrService(_ cbrService: CBRService,
+					didFetch value: Decimal,
+					for currency: CBRService.Currency,
+					error: CBRService.CBRError?) {
 		guard let data = self.conversionData else {
 			self.delegate?.currencyConversionService(self, didConvert: 0)
 			return

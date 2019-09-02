@@ -62,7 +62,6 @@ class DatePickerView: UIView {
 		self.setupUI()
 		self.setupConstraints()
 		
-		// DEBUG
 		self.label.backgroundColor = .clear
 		self.textField.backgroundColor = .clear
 	}
@@ -75,7 +74,7 @@ class DatePickerView: UIView {
 		self.underline.backgroundColor = UIColor(white: 0, alpha: 0.3)
 		
 		self.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-		self.label.text = "Выберите дату курса валют"
+		self.label.text = UIStringsProvider.shared.selectDateHint
 		self.label.font = UIFont.preferredFont(forTextStyle: .caption1)
 		self.label.textAlignment = .right
 		
@@ -95,8 +94,6 @@ class DatePickerView: UIView {
 	
 	func setupConstraints() {
 		self.label.mas_makeConstraints { (make) in
-//			make?.bottom.left()?.top()?.equalTo()(self)
-//			make?.right.equalTo()(self.textField.mas_left)
 			make?.left.right()?.equalTo()(self)
 			make?.bottom.equalTo()(self)?.inset()(5)
 			make?.top.equalTo()(self.textField.mas_bottom)?.inset()(0)

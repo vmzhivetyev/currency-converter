@@ -15,4 +15,5 @@ protocol CurrencyConverterPresenterOutput: class {
 	func selectCurrencies(firstIndex: Int, secondIndex: Int)
 	func showConversion(of sum: Decimal, conversionDirection: CurrencyConverterViewController.ConversionDirection)
 	func showError(text: String)
+	func showLoading(_ show: Bool)
 }

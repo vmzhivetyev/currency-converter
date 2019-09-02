@@ -73,6 +73,7 @@ class CurrencyInputView : UIView {
 		self.currencyCodeTextField.tintColor = .clear
 		self.currencyCodeTextField.font = UIFont.preferredFont(forTextStyle: .title1)
 		self.currencyCodeTextField.delegate = self
+		self.currencyCodeTextField.textAlignment = .right
 		
 		self.sumTextField.font = UIFont.preferredFont(forTextStyle: .title1)
 		self.sumTextField.adjustsFontSizeToFitWidth = true
@@ -90,7 +91,7 @@ class CurrencyInputView : UIView {
 		
 		self.currencyCodeTextField.mas_makeConstraints { (make) in
 			make?.top.right()?.equalTo()(self)
-			make?.width.equalTo()(60)
+			make?.width.equalTo()(65)
 			make?.bottom.equalTo()(self.sumTextField.mas_bottom)
 		}
 	}

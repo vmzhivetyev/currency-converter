@@ -23,6 +23,7 @@ class CurrencyConverterViewController: UIViewController {
 	let firstCurrencyInputView = CurrencyInputView()
 	let secondCurrencyInputView = CurrencyInputView()
 	let messageLabel = UILabel()
+	let loadingView = LoadingView()
 	
 	private var lastConversionDirection : ConversionDirection = .forward
 
@@ -37,7 +38,7 @@ class CurrencyConverterViewController: UIViewController {
 	}
 	
 	func setupUI() {
-		self.navigationItem.title = "Currency Converter"
+		self.navigationItem.title = UIStringsProvider.shared.currencyConverterScreenTitle
 		self.view.backgroundColor = .white
 		
 		self.datePickerView.delegate = self
@@ -56,7 +57,7 @@ class CurrencyConverterViewController: UIViewController {
 			let equalsCharLabel = UILabel()
 			equalsCharLabel.text = "="
 			equalsCharLabel.textAlignment = .center
-			equalsCharLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+			equalsCharLabel.font = UIFont.preferredFont(forTextStyle: .title3)
 			equalsCharLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 			return equalsCharLabel
 			}())
@@ -69,6 +70,7 @@ class CurrencyConverterViewController: UIViewController {
 		self.view.addSubview(self.datePickerView)
 		self.view.addSubview(self.currencyInputsStackView)
 		self.view.addSubview(self.messageLabel)
+		self.view.addSubview(self.loadingView)
 	}
 	
 	func setupConstraints() {
@@ -87,6 +89,10 @@ class CurrencyConverterViewController: UIViewController {
 		self.messageLabel.mas_makeConstraints { (make) in
 			make?.top.equalTo()(self.currencyInputsStackView.mas_bottom)?.inset()(16)
 			make?.left.right()?.equalTo()(self.view)?.inset()(16)
+		}
+		
+		self.loadingView.mas_makeConstraints { (make) in
+			make?.edges.equalTo()(self.view)
 		}
 	}
 	
@@ -110,15 +116,14 @@ class CurrencyConverterViewController: UIViewController {
 	}
 	
 	func conversionDirection(for currencyInputView: CurrencyInputView) -> ConversionDirection {
-		let result : ConversionDirection =
-			currencyInputView == self.secondCurrencyInputView ? .backward : .forward
-		return result
+		return currencyInputView == self.secondCurrencyInputView ? .backward : .forward
 	}
 	
 	func animateUI(finished: Bool) {
-		UIView.animate(withDuration: 0.2) {
-			self.firstCurrencyInputView.alpha = finished || self.lastConversionDirection == .forward ? 1 : 0.5
-			self.secondCurrencyInputView.alpha = finished || self.lastConversionDirection == .backward ? 1 : 0.5
+		UIView.animate(withDuration: 0.4) {
+			let lowAlpha : CGFloat = 0.3
+			self.firstCurrencyInputView.alpha = finished || self.lastConversionDirection == .forward ? 1 : lowAlpha
+			self.secondCurrencyInputView.alpha = finished || self.lastConversionDirection == .backward ? 1 : lowAlpha
 		}
 		
 	}
@@ -156,6 +161,12 @@ extension CurrencyConverterViewController : CurrencyConverterPresenterOutput {
 	
 	func showError(text: String) {
 		self.messageLabel.text = text
+	}
+	
+	func showLoading(_ show: Bool) {
+		UIView.animate(withDuration: 0.5) {
+			self.loadingView.alpha = show ? 1 : 0
+		}
 	}
 }
 

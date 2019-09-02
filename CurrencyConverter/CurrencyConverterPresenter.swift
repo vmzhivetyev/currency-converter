@@ -28,20 +28,10 @@ class CurrencyConverterPresenter {
 extension CurrencyConverterPresenter : CurrencyConverterViewControllerOutput {
 	func didLoadView() {
 		self.conversionService.fetchCurrencies()
+		self.output?.showLoading(true)
 	}
 	
 	func requestConversion(data: CurrencyConverterViewData) {
-		print("""
-			
-			Request:
-			\(data.date)
-			\(data.firstSum)
-			\(data.firstCurrency)
-			\(data.secondSum)
-			\(data.secondCurrency)
-			
-			""")
-		
 		guard
 			let dataFirstCurrency = data.firstCurrency,
 			let dataSecondCurrency = data.secondCurrency else {
@@ -50,8 +40,8 @@ extension CurrencyConverterPresenter : CurrencyConverterViewControllerOutput {
 		
 		self.lastRequestData = data
 		
-		let firstCurrency = ConvertableCurrency(isoCode: dataFirstCurrency.code, name: dataFirstCurrency.name)
-		let secondCurrency = ConvertableCurrency(isoCode: dataSecondCurrency.code, name: dataSecondCurrency.name)
+		let firstCurrency = CurrencyConversionService.Currency(isoCode: dataFirstCurrency.code, name: dataFirstCurrency.name)
+		let secondCurrency = CurrencyConversionService.Currency(isoCode: dataSecondCurrency.code, name: dataSecondCurrency.name)
 		
 		let isForward = data.conversionDirection == .forward
 		
@@ -65,7 +55,8 @@ extension CurrencyConverterPresenter : CurrencyConverterViewControllerOutput {
 }
 
 extension CurrencyConverterPresenter : CurrencyConversionServiceDelegate {
-	func currencyConversionService(_ service: CurrencyConversionServiceProtocol, didFetch currencies: [ConvertableCurrency]) {
+	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
+								   didFetch currencies: [CurrencyConversionService.Currency]) {
 		let currenciesForView = currencies.map { CurrencyInputView.Currency(code: $0.isoCode, name: $0.name) }
 		self.output?.showCurrenciesList(currenciesForView)
 		
@@ -77,6 +68,7 @@ extension CurrencyConverterPresenter : CurrencyConversionServiceDelegate {
 		}
 		self.output?.selectCurrencies(firstIndex: indexOfUSD, secondIndex: indexOfRUB)
 		self.output?.showConversion(of: 1, conversionDirection: .forward)
+		self.output?.showLoading(false)
 	}
 	
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol, didConvert resultSum: Decimal) {
@@ -93,6 +85,6 @@ extension CurrencyConverterPresenter : CurrencyConversionServiceDelegate {
 	
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
 								   conversionFailedWith error: CurrencyConversionError) {
-		self.output?.showError(text: "Exchange rates for\u{00a0}selected date and\u{00a0}currencies are\u{00a0}not\u{00a0}available")
+		self.output?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
 	}
 }
