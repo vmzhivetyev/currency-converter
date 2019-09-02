@@ -85,7 +85,7 @@ class CBRService {
 				return
 			}
 			completion(XML.parse(data), error)
-			}.resume()
+		}.resume()
 	}
 }
 

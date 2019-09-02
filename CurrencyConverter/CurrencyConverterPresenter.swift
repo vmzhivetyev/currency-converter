@@ -40,8 +40,10 @@ extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 
 		self.lastRequestData = data
 
-		let firstCurrency = CurrencyConversionService.Currency(isoCode: dataFirstCurrency.code, name: dataFirstCurrency.name)
-		let secondCurrency = CurrencyConversionService.Currency(isoCode: dataSecondCurrency.code, name: dataSecondCurrency.name)
+		let firstCurrency = CurrencyConversionService.Currency(isoCode: dataFirstCurrency.code,
+															   name: dataFirstCurrency.name)
+		let secondCurrency = CurrencyConversionService.Currency(isoCode: dataSecondCurrency.code,
+																name: dataSecondCurrency.name)
 
 		let isForward = data.conversionDirection == .forward
 

@@ -25,14 +25,12 @@ class CurrencyInputView: UIView {
 	}
 
 	var selectedCurrency: Currency? {
-		get {
-			let index = self.currencyPickerView.selectedRow(inComponent: 0)
-			guard index < self.currencies.count else {
-				return nil
-			}
-			let selectedCurrency = self.currencies[index]
-			return selectedCurrency
+		let index = self.currencyPickerView.selectedRow(inComponent: 0)
+		guard index < self.currencies.count else {
+			return nil
 		}
+		let selectedCurrency = self.currencies[index]
+		return selectedCurrency
 	}
 
 	var sumValue: Decimal {
@@ -134,7 +132,9 @@ extension CurrencyInputView: UIPickerViewDelegate {
 }
 
 extension CurrencyInputView: UITextFieldDelegate {
-	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+	func textField(_ textField: UITextField,
+				   shouldChangeCharactersIn range: NSRange,
+				   replacementString string: String) -> Bool {
 		return false
 	}
 }

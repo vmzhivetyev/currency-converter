@@ -67,7 +67,9 @@ extension SumInputFieldFormatter: UITextFieldDelegate {
 		return false
 	}
 
-	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+	func textField(_ textField: UITextField,
+				   shouldChangeCharactersIn range: NSRange,
+				   replacementString string: String) -> Bool {
 
 		/* #CRUTCH:
 		Каст к NSString - чтобы иметь возможность вызвать replacingCharacters
