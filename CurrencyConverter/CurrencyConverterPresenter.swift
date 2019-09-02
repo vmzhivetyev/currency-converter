@@ -23,6 +23,12 @@ class CurrencyConverterPresenter {
 	init(currencyConversionService: CurrencyConversionServiceProtocol) {
 		self.conversionService = currencyConversionService
 	}
+	
+	func retryRequest(_ requestClosure: @escaping () -> ()) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+			requestClosure()
+		}
+	}
 }
 
 extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
@@ -59,6 +65,14 @@ extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
 								   didFetch currencies: [CurrencyConversionService.Currency]) {
+		// Автоповтор запроса списка валют каждую секунду, если он падает
+		if currencies.count <= 1 {
+			self.retryRequest { [weak self] in
+				self?.conversionService.fetchCurrencies()
+			}
+			return
+		}
+		
 		let currenciesForView = currencies.map { CurrencyInputView.Currency(code: $0.isoCode, name: $0.name) }
 		self.output?.showCurrenciesList(currenciesForView)
 
@@ -92,6 +106,15 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 								   conversionFailedWith error: CurrencyConversionError) {
 		if case .exchangeRateUnavailable = error {
 			self.output?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
+		} else {
+			self.output?.showError(text: UIStringsProvider.shared.requestError)
+			// Запрос упал, пробуем еще раз
+			self.retryRequest { [weak self] in
+				guard let data = self?.lastRequestData else {
+					return
+				}
+				self?.requestConversion(data: data)
+			}
 		}
 	}
 }

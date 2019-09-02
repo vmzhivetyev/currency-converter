@@ -14,6 +14,7 @@ class UIStringsProvider {
 
 	var currencyConverterScreenTitle: String { return "Currency Converter" }
 	var selectDateHint: String { return "Выберите дату курса валют" }
-	var exchangeRateUnavailable: String { return "Курс обмена для выбранной даты и валюты недоступен" }
+	var exchangeRateUnavailable: String { return "Курс обмена для выбранной даты и валюты недоступен." }
+	var requestError: String { return "Не удалось получить курс валюты.\nИдет повтор запроса..." }
 
 }

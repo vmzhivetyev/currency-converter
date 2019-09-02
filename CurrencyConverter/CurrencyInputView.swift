@@ -103,7 +103,7 @@ class CurrencyInputView: UIView {
 
 	func selectCurrency(at index: Int) {
 		if index < self.currencies.count {
-			self.currencyPickerView.selectRow(Int(index), inComponent: 0, animated: true)
+			self.currencyPickerView.selectRow(Int(index), inComponent: 0, animated: false)
 		}
 		self.displaySelectedCurrency()
 	}

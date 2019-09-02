@@ -13,6 +13,7 @@ class CBRService {
 	enum CBRError: Error {
 		case unableToCreateURL
 		case conversionRateUnavailable
+		case requestError
 	}
 
 	private enum CBRURL: String {
@@ -170,7 +171,7 @@ extension CBRService: CBRServiceProtocol {
 						self.delegate?.cbrService(self,
 												  didFetch: 0,
 												  for: currency,
-												  error: CBRError.conversionRateUnavailable)
+												  error: xmlOpt != nil ? .conversionRateUnavailable : .requestError)
 					}
 					return
 			}

@@ -128,7 +128,11 @@ extension CurrencyConversionService: CBRServiceDelegate {
 			let result = data.sum * ratio
 			self.delegate?.currencyConversionService(self, didConvert: result)
 		} else {
-			self.delegate?.currencyConversionService(self, conversionFailedWith: .exchangeRateUnavailable)
+			if error == .conversionRateUnavailable {
+				self.delegate?.currencyConversionService(self, conversionFailedWith: .exchangeRateUnavailable)
+			} else {
+				self.delegate?.currencyConversionService(self, conversionFailedWith: .requestError)
+			}
 		}
 	}
 }
