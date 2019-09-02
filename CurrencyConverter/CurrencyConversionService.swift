@@ -48,9 +48,23 @@ class CurrencyConversionService {
 	private var currenciesList: [CBRService.Currency] = []
 	private var conversionData: CurrencyConversionData?
 	private var conversionResult = ConversionResult()
+	
+	private var dataTasksQueue = [URLSessionDataTask]()
 
 	init(cbrService: CBRServiceProtocol) {
 		self.cbrService = cbrService
+	}
+	
+	func cancelPreviousCurrencyValueDataTasks() {
+		self.dataTasksQueue.forEach { $0.cancel() }
+		self.dataTasksQueue.removeAll()
+	}
+	
+	func enqueueCurrencyValueDataTask(_ dataTask: URLSessionDataTask?) {
+		guard let task = dataTask else {
+			return
+		}
+		self.dataTasksQueue.append(task)
 	}
 }
 
@@ -74,8 +88,11 @@ extension CurrencyConversionService: CurrencyConversionServiceProtocol {
 			self.delegate?.currencyConversionService(self, didConvert: data.sum)
 			return
 		}
-		self.cbrService.fetchCurrencyValue(fromCurrency, date: data.date)
-		self.cbrService.fetchCurrencyValue(toCurrency, date: data.date)
+		self.cancelPreviousCurrencyValueDataTasks()
+		let task1 = self.cbrService.fetchCurrencyValue(fromCurrency, date: data.date)
+		let task2 = self.cbrService.fetchCurrencyValue(toCurrency, date: data.date)
+		self.enqueueCurrencyValueDataTask(task1)
+		self.enqueueCurrencyValueDataTask(task2)
 	}
 }
 

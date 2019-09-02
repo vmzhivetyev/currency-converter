@@ -112,6 +112,7 @@ class CurrencyConverterViewController: UIViewController {
 			conversionDirection: conversionDirection)
 		self.lastConversionDirection = conversionDirection
 		self.animateUI(finished: false)
+		self.messageLabel.text = nil
 		self.output?.requestConversion(data: data)
 	}
 

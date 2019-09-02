@@ -55,13 +55,6 @@ class CBRService {
 
 	private var cachedValues = [String: Decimal]()
 
-	private func xmlFromUrl(_ cbrURL: CBRURL,
-							completion: @escaping (XML.Accessor?, Error?) -> Void) {
-		self.xmlFromUrl(cbrURL,
-						parameters: [:],
-						completion: completion)
-	}
-
 	private func url(_ cbrURL: CBRURL, parameters: [String: String]) -> URL? {
 		let urlWithoutParameters = baseURL.appendingPathComponent(cbrURL.rawValue)
 		var urlComponents = URLComponents(url: urlWithoutParameters, resolvingAgainstBaseURL: true)
@@ -71,21 +64,28 @@ class CBRService {
 
 	private func xmlFromUrl(_ cbrURL: CBRURL,
 							parameters: [String: String],
-							completion: @escaping (XML.Accessor?, Error?) -> Void) {
+							completion: @escaping (XML.Accessor?, Error?) -> Void) -> URLSessionDataTask? {
 		guard let fullURL = self.url(cbrURL, parameters: parameters) else {
 			print("Error: Unable to create url")
 			completion(nil, CBRError.unableToCreateURL)
-			return
+			return nil
 		}
 
 		print("Doing request at URL:\n  \(fullURL)")
-		self.urlSession.dataTask(with: fullURL) { (data, _, error) in
+		let dataTask = self.urlSession.dataTask(with: fullURL) { (data, _, error) in
 			guard let data = data else {
 				completion(nil, error)
 				return
 			}
 			completion(XML.parse(data), error)
-		}.resume()
+		}
+		// simulating slow connection
+//		DispatchQueue.global(qos: .userInitiated).async {
+//			sleep(5)
+//			dataTask.resume()
+//		}
+		dataTask.resume()
+		return dataTask
 	}
 }
 
@@ -107,10 +107,53 @@ extension CBRService {
 }
 
 extension CBRService: CBRServiceProtocol {
-	func fetchCurrencyValue(_ currency: CBRService.Currency, date: Date) {
+	func fetchCurrenciesList() {
+		_ = self.xmlFromUrl(.currenciesList, parameters: [:]) { (xmlOpt, _) in
+			guard let xml = xmlOpt else {
+				DispatchQueue.main.async {
+					self.delegate?.cbrService(self, didFetch: [])
+				}
+				return
+			}
+			var list = xml["Valuta"]["Item"].compactMap { (item) -> Currency? in
+				guard
+					let id = item.attributes["ID"]?.trimmingCharacters(in: .whitespaces),
+					let isoCode = item["ISO_Char_Code"].text?.trimmingCharacters(in: .whitespaces),
+					let name = item["Name"].text?.trimmingCharacters(in: .whitespaces)
+					else {
+						return nil
+				}
+				
+				return Currency(id: id,
+								isoCode: isoCode,
+								name: name,
+								engName: item["EngName"].text?.trimmingCharacters(in: .whitespaces),
+								nominal: item["Nominal"].text?.trimmingCharacters(in: .whitespaces),
+								parentCode: item["ParentCode"].text?.trimmingCharacters(in: .whitespaces))
+			}
+			list.append(CBRService.rubCurrency)
+			list.sort(by: { $0.isoCode < $1.isoCode })
+			DispatchQueue.main.async {
+				self.delegate?.cbrService(self, didFetch: list)
+			}
+		}
+	}
+	
+	///
+	/// Запрашиваем последний известный курс валюты в течение десяти дней до необходимой даты.
+	///
+	///	Смотрим курс за последние десять дней до выбранной даты, так как API cbr.ru
+	///	не отдает курс за день, если он такой же, как был вчера.
+	///	Если за десять дней до выбранной даты не будет ни одной записи о курсе валюты,
+	///	будем считать, что все плохо и показывать ошибку.
+	///
+	/// - Parameters:
+	///   - currency: Валюта для получения ее стоимости в рублях
+	///   - date: Дата курса валюты
+	func fetchCurrencyValue(_ currency: CBRService.Currency, date: Date) -> URLSessionDataTask? {
 		if currency == CBRService.rubCurrency {
 			self.delegate?.cbrService(self, didFetch: 1, for: currency, error: nil)
-			return
+			return nil
 		}
 
 		let tenDaysBefore = Calendar.current.date(byAdding: .day, value: -10, to: date) ?? date
@@ -120,10 +163,10 @@ extension CBRService: CBRServiceProtocol {
 
 		if let cachedValue = self.cachedValue(currency: currency, date: date) {
 			self.delegate?.cbrService(self, didFetch: cachedValue, for: currency, error: nil)
-			return
+			return nil
 		}
 
-		self.xmlFromUrl(.currencyValue, parameters: [
+		return self.xmlFromUrl(.currencyValue, parameters: [
 			"date_req1": firstDate,
 			"date_req2": secondDate,
 			"VAL_NM_RQ": currency.id
@@ -148,38 +191,6 @@ extension CBRService: CBRServiceProtocol {
 				let result = decimalValue / decimalNominal
 				self.cacheValue(currency: currency, date: date, value: result)
 				self.delegate?.cbrService(self, didFetch: result, for: currency, error: nil)
-			}
-		}
-	}
-
-	func fetchCurrenciesList() {
-		self.xmlFromUrl(.currenciesList) { (xmlOpt, _) in
-			guard let xml = xmlOpt else {
-				DispatchQueue.main.async {
-					self.delegate?.cbrService(self, didFetch: [])
-				}
-				return
-			}
-			var list = xml["Valuta"]["Item"].compactMap { (item) -> Currency? in
-				guard
-					let id = item.attributes["ID"]?.trimmingCharacters(in: .whitespaces),
-					let isoCode = item["ISO_Char_Code"].text?.trimmingCharacters(in: .whitespaces),
-					let name = item["Name"].text?.trimmingCharacters(in: .whitespaces)
-					else {
-						return nil
-				}
-
-				return Currency(id: id,
-								isoCode: isoCode,
-								name: name,
-								engName: item["EngName"].text?.trimmingCharacters(in: .whitespaces),
-								nominal: item["Nominal"].text?.trimmingCharacters(in: .whitespaces),
-								parentCode: item["ParentCode"].text?.trimmingCharacters(in: .whitespaces))
-			}
-			list.append(CBRService.rubCurrency)
-			list.sort(by: { $0.isoCode < $1.isoCode })
-			DispatchQueue.main.async {
-				self.delegate?.cbrService(self, didFetch: list)
 			}
 		}
 	}
