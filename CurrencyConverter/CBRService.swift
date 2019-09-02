@@ -54,10 +54,11 @@ class CBRService {
 		return formatter
 	}()
 	
-	private let cache: CBRServiceCurrencyValuesCache
+	private var cache = [String: Decimal]()
 	
-	init() {
-		self.cache = CBRServiceCurrencyValuesCache(dateFormatter: self.dateFormatter)
+	func cacheKey(_ currency: Currency, _ date: Date) -> String {
+		let dateStr = self.dateFormatter.string(from: date)
+		return "\(currency.isoCode) \(dateStr)"
 	}
 
 	private func url(_ cbrURL: CBRURL, parameters: [String: String]) -> URL? {
@@ -149,7 +150,7 @@ extension CBRService: CBRServiceProtocol {
 		let firstDate = self.dateFormatter.string(from: tenDaysBefore)
 		let secondDate = self.dateFormatter.string(from: date)
 
-		if let cachedValue = self.cache.getCachedValue(for: currency, date: date) {
+		if let cachedValue = self.cache[self.cacheKey(currency, date)] {
 			self.delegate?.cbrService(self, didFetch: cachedValue, for: currency, error: nil)
 			return nil
 		}
@@ -177,7 +178,7 @@ extension CBRService: CBRServiceProtocol {
 			}
 			DispatchQueue.main.async {
 				let result = decimalValue / decimalNominal
-				self.cache.cacheValue(for: currency, date: date, value: result)
+				self.cache[self.cacheKey(currency, date)] = result
 				self.delegate?.cbrService(self, didFetch: result, for: currency, error: nil)
 			}
 		}
