@@ -11,7 +11,7 @@ import UIKit
 protocol CurrencyConverterPresenterOutput: class {
 	func showCurrenciesList(_ list: [CurrencyInputView.Currency])
 	func showSumAfterConversion(data: CurrencyConverterViewData)
-	
+
 	func selectCurrencies(firstIndex: Int, secondIndex: Int)
 	func showConversion(of sum: Decimal, conversionDirection: CurrencyConverterViewController.ConversionDirection)
 	func showError(text: String)

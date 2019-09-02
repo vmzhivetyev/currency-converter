@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 protocol CBRServiceDelegate: class {
 	func cbrService(_ cbrService: CBRService, didFetch currencies: [CBRService.Currency])
 	func cbrService(_ cbrService: CBRService,

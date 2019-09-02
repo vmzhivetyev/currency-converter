@@ -10,6 +10,6 @@ import UIKit
 
 protocol CurrencyConversionServiceProtocol {
 	func fetchCurrencies()
-	
+
 	func convert(data: CurrencyConversionService.CurrencyConversionData)
 }

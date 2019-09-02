@@ -9,11 +9,11 @@
 import UIKit
 
 class SumInputFieldFormatter: NSObject {
-	
-	weak var delegate : SumInputFieldFormatterDelegate?
-	
+
+	weak var delegate: SumInputFieldFormatterDelegate?
+
 	var maximumLength = 10
-	
+
 	var sumValue: Decimal {
 		get {
 			let text = self.textField.text
@@ -23,9 +23,9 @@ class SumInputFieldFormatter: NSObject {
 			self.textField.text = self.numberFormatter.string(from: newValue as NSDecimalNumber)
 		}
 	}
-	
-	private let textField : UITextField
-	
+
+	private let textField: UITextField
+
 	private let numberFormatter: NumberFormatter = {
 		let formatter = NumberFormatter()
 		formatter.locale = NSLocale.current
@@ -36,19 +36,19 @@ class SumInputFieldFormatter: NSObject {
 		formatter.roundingMode = .up
 		return formatter
 	}()
-	
+
 	init(textField: UITextField) {
 		self.textField = textField
-		
+
 		super.init()
-		
+
 		self.textField.delegate = self
-		
+
 		self.textField.keyboardType = .numbersAndPunctuation
 		self.textField.returnKeyType = .done
 		self.textField.addTarget(self, action: #selector(textDidChange(_:)), for: .editingChanged)
 	}
-	
+
 	private func number(from string: String?) -> NSNumber? {
 		guard let validString = string?
 			.replacingOccurrences(of: " ", with: "")
@@ -56,19 +56,19 @@ class SumInputFieldFormatter: NSObject {
 			.replacingOccurrences(of: ".", with: numberFormatter.decimalSeparator) else {
 				return nil
 		}
-		
+
 		return numberFormatter.number(from: validString)
 	}
 }
 
-extension SumInputFieldFormatter : UITextFieldDelegate {
+extension SumInputFieldFormatter: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		self.textField.resignFirstResponder()
 		return false
 	}
-	
+
 	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-		
+
 		/* #CRUTCH:
 		Каст к NSString - чтобы иметь возможность вызвать replacingCharacters
 		с параметром типа NSRange.
@@ -78,10 +78,10 @@ extension SumInputFieldFormatter : UITextFieldDelegate {
 		}
 		let newText = nsString
 			.replacingCharacters(in: range, with: string)
-		
+
 		let oldLength = textField.text?.count ?? 0
 		let overflow = newText.count > self.maximumLength && newText.count > oldLength
-		
+
 		return !overflow && (self.number(from: newText) != nil || newText == "")
 	}
 }

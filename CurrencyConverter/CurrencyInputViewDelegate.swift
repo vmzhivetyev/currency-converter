@@ -8,12 +8,11 @@
 
 import Foundation
 
-
 protocol CurrencyInputViewDelegate: class {
-	
+
 	func currencyInputView(_ currencyInputView: CurrencyInputView,
 						   didChange value: Decimal)
-	
+
 	func currencyInputView(_ currencyInputView: CurrencyInputView,
 						   didSelect currency: CurrencyInputView.Currency?)
 }
