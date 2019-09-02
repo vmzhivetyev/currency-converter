@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1313E867231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1313E866231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift */; };
 		133B0803231CF22E003B4D13 /* CurrencyConversionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133B0802231CF22E003B4D13 /* CurrencyConversionError.swift */; };
 		133B0806231D1257003B4D13 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133B0805231D1257003B4D13 /* LoadingView.swift */; };
 		138E62F1231D333D002DD49E /* UIStringsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138E62F0231D333D002DD49E /* UIStringsProvider.swift */; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		066189A4F9354FFC0E886CE6 /* Pods-CurrencyConverterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CurrencyConverterTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CurrencyConverterTests/Pods-CurrencyConverterTests.release.xcconfig"; sourceTree = "<group>"; };
+		1313E866231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CBRServiceCurrencyValuesCache.swift; sourceTree = "<group>"; };
 		133B0802231CF22E003B4D13 /* CurrencyConversionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConversionError.swift; sourceTree = "<group>"; };
 		133B0805231D1257003B4D13 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		138E62F0231D333D002DD49E /* UIStringsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStringsProvider.swift; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 			children = (
 				13D3DD77231C5F500033394F /* CBRServiceProtocol.swift */,
 				13D3DD71231C4EAE0033394F /* CBRService.swift */,
+				1313E866231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift */,
 				13D3DD75231C5E710033394F /* CBRServiceDelegate.swift */,
 			);
 			name = "CBR Backend";
@@ -519,6 +522,7 @@
 				133B0806231D1257003B4D13 /* LoadingView.swift in Sources */,
 				133B0803231CF22E003B4D13 /* CurrencyConversionError.swift in Sources */,
 				13F77252231B4F0900090B0F /* SumInputFieldFormatter.swift in Sources */,
+				1313E867231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift in Sources */,
 				13D3DD76231C5E710033394F /* CBRServiceDelegate.swift in Sources */,
 				13D3DD55231B6C190033394F /* CurrencyConverterViewControllerOutput.swift in Sources */,
 				13D3DD65231B7F280033394F /* CurrencyConverterViewData.swift in Sources */,
