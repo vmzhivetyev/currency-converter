@@ -218,9 +218,9 @@
 			isa = PBXGroup;
 			children = (
 				13D3DD77231C5F500033394F /* CBRServiceProtocol.swift */,
+				13D3DD75231C5E710033394F /* CBRServiceDelegate.swift */,
 				13D3DD71231C4EAE0033394F /* CBRService.swift */,
 				1313E866231D5F3500D61196 /* CBRServiceCurrencyValuesCache.swift */,
-				13D3DD75231C5E710033394F /* CBRServiceDelegate.swift */,
 			);
 			name = "CBR Backend";
 			sourceTree = "<group>";

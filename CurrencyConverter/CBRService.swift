@@ -53,7 +53,7 @@ class CBRService {
 		return formatter
 	}()
 	
-	private let cache : CBRServiceCurrencyValuesCache
+	private let cache: CBRServiceCurrencyValuesCache
 	
 	init() {
 		self.cache = CBRServiceCurrencyValuesCache(dateFormatter: self.dateFormatter)
@@ -127,7 +127,7 @@ extension CBRService: CBRServiceProtocol {
 	}
 	
 	///
-	/// Запрашиваем последний известный курс валюты в течение десяти дней до необходимой даты.
+	/// Запрашиваем последний известный курс валюты за все десять дней до необходимой даты.
 	///
 	///	Смотрим курс за последние десять дней до выбранной даты, так как API cbr.ru
 	///	не отдает курс за день, если он такой же, как был вчера.

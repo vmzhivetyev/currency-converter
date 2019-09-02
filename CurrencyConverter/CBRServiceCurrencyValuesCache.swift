@@ -12,7 +12,7 @@ class CBRServiceCurrencyValuesCache {
 
 	private var cachedValues = [String: Decimal]()
 	
-	private let dateFormatter : DateFormatter
+	private let dateFormatter: DateFormatter
 	
 	init(dateFormatter: DateFormatter) {
 		self.dateFormatter = dateFormatter

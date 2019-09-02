@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let window = UIWindow()
 		let navigationController = UINavigationController()
+		
 		navigationController.viewControllers = [
 			CurrencyConverterViewAssembly().createViewController()
 		]
