@@ -82,9 +82,11 @@ extension SumInputFieldFormatter: UITextFieldDelegate {
 			.replacingCharacters(in: range, with: string)
 
 		let oldLength = textField.text?.count ?? 0
+		/// Запрещаем ввод, если длина будет увеличена больше лимита
 		let overflow = newText.count > self.maximumLength && newText.count > oldLength
-
-		return !overflow && (self.number(from: newText) != nil || newText == "")
+		let newTextIsNumberOrEmpty = self.number(from: newText) != nil || newText == ""
+		
+		return !overflow && newTextIsNumberOrEmpty
 	}
 }
 

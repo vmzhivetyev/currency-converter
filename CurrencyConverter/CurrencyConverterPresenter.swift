@@ -66,6 +66,9 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 			let indexOfRUB = currenciesForView.firstIndex(where: { $0.code == KnownCurrencyISO.RUB.rawValue }),
 			let indexOfUSD = currenciesForView.firstIndex(where: { $0.code == KnownCurrencyISO.USD.rawValue })
 			else {
+				self.output?.selectCurrencies(firstIndex: 0, secondIndex: 3)
+				self.output?.showConversion(of: 1, conversionDirection: .forward)
+				self.output?.showLoading(false)
 				return
 		}
 		self.output?.selectCurrencies(firstIndex: indexOfUSD, secondIndex: indexOfRUB)
@@ -87,6 +90,8 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
 								   conversionFailedWith error: CurrencyConversionError) {
-		self.output?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
+		if case .exchangeRateUnavailable = error {
+			self.output?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
+		}
 	}
 }

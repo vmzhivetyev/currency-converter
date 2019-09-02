@@ -108,7 +108,7 @@ extension CurrencyConversionService: CBRServiceDelegate {
 					for currency: CBRService.Currency,
 					error: CBRService.CBRError?) {
 		guard let data = self.conversionData else {
-			self.delegate?.currencyConversionService(self, didConvert: 0)
+			self.delegate?.currencyConversionService(self, conversionFailedWith: .unexpectedBehaviour)
 			return
 		}
 
