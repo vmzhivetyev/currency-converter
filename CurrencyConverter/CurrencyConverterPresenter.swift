@@ -35,6 +35,12 @@ extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 	func didLoadView() {
 		self.conversionService.fetchCurrencies()
 		self.output?.showLoading(true)
+		
+		let currentDate = Date()
+		let minDate = DateComponents(calendar: Calendar.current,
+									 timeZone: TimeZone.current,
+									 year: 1991, month: 1, day: 1).date!
+		self.output?.showDate(picked: currentDate, minimum: minDate, maximum: currentDate)
 	}
 
 	func requestConversion(data: CurrencyConverterViewData) {

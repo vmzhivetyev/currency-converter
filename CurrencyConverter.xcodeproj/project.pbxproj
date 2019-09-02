@@ -134,13 +134,12 @@
 			name = CurrencyConversionService;
 			sourceTree = "<group>";
 		};
-		138E62EE231D31C5002DD49E /* Core */ = {
+		138E62EE231D31C5002DD49E /* Core Layer */ = {
 			isa = PBXGroup;
 			children = (
-				13E4F19123198D4700BDE8EB /* AppDelegate.swift */,
 				13D3DD70231C4E880033394F /* CBR Backend */,
 			);
-			name = Core;
+			name = "Core Layer";
 			sourceTree = "<group>";
 		};
 		138E62EF231D31CE002DD49E /* UIStrings */ = {
@@ -196,12 +195,12 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		13D3DD66231C45780033394F /* Business Logic */ = {
+		13D3DD66231C45780033394F /* Business Logic Layer */ = {
 			isa = PBXGroup;
 			children = (
 				138E62ED231D2676002DD49E /* CurrencyConversionService */,
 			);
-			name = "Business Logic";
+			name = "Business Logic Layer";
 			sourceTree = "<group>";
 		};
 		13D3DD6D231C47BF0033394F /* Assembly */ = {
@@ -248,8 +247,9 @@
 				13E4F19A23198D4800BDE8EB /* LaunchScreen.storyboard */,
 				13E4F19823198D4800BDE8EB /* Assets.xcassets */,
 				13E4F19D23198D4800BDE8EB /* Info.plist */,
-				138E62EE231D31C5002DD49E /* Core */,
-				13D3DD66231C45780033394F /* Business Logic */,
+				13E4F19123198D4700BDE8EB /* AppDelegate.swift */,
+				138E62EE231D31C5002DD49E /* Core Layer */,
+				13D3DD66231C45780033394F /* Business Logic Layer */,
 				13F77254231B655A00090B0F /* Presentation Layer */,
 			);
 			path = CurrencyConverter;

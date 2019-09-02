@@ -45,9 +45,6 @@ class CurrencyConverterViewController: UIViewController {
 		self.firstCurrencyInputView.delegate = self
 		self.secondCurrencyInputView.delegate = self
 
-		self.datePickerView.pickedDate = Date()
-		self.datePickerView.maximumDate = Date()
-
 		self.currencyInputsStackView.alignment = .fill
 		self.currencyInputsStackView.distribution = .fillProportionally
 		self.currencyInputsStackView.axis = .horizontal
@@ -131,6 +128,12 @@ class CurrencyConverterViewController: UIViewController {
 }
 
 extension CurrencyConverterViewController: CurrencyConverterPresenterOutput {
+	func showDate(picked: Date, minimum: Date, maximum: Date) {
+		self.datePickerView.pickedDate = picked
+		self.datePickerView.minimumDate = minimum
+		self.datePickerView.maximumDate = maximum
+	}
+	
 	func showCurrenciesList(_ list: [CurrencyInputView.Currency]) {
 		self.firstCurrencyInputView.currencies = list
 		self.secondCurrencyInputView.currencies = list

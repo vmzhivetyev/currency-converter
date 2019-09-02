@@ -9,6 +9,7 @@
 import UIKit
 
 protocol CurrencyConverterPresenterOutput: class {
+	func showDate(picked: Date, minimum: Date, maximum: Date)
 	func showCurrenciesList(_ list: [CurrencyInputView.Currency])
 	func showSumAfterConversion(data: CurrencyConverterViewData)
 
