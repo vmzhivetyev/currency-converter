@@ -12,18 +12,7 @@ class SumInputFieldFormatter: NSObject {
 	
 	weak var delegate : SumInputFieldFormatterDelegate?
 	
-	let textField : UITextField
-	
-	let numberFormatter: NumberFormatter = {
-		let formatter = NumberFormatter()
-		formatter.locale = NSLocale.current
-		formatter.numberStyle = NumberFormatter.Style.decimal
-		formatter.usesGroupingSeparator = true
-		formatter.groupingSeparator = " "
-		formatter.maximumFractionDigits = 2
-		formatter.roundingMode = .up
-		return formatter
-	}()
+	var maximumLength = 10
 	
 	var sumValue: Decimal {
 		get {
@@ -34,6 +23,19 @@ class SumInputFieldFormatter: NSObject {
 			self.textField.text = self.numberFormatter.string(from: newValue as NSDecimalNumber)
 		}
 	}
+	
+	private let textField : UITextField
+	
+	private let numberFormatter: NumberFormatter = {
+		let formatter = NumberFormatter()
+		formatter.locale = NSLocale.current
+		formatter.numberStyle = NumberFormatter.Style.decimal
+		formatter.usesGroupingSeparator = true
+		formatter.groupingSeparator = " "
+		formatter.maximumFractionDigits = 2
+		formatter.roundingMode = .up
+		return formatter
+	}()
 	
 	init(textField: UITextField) {
 		self.textField = textField
@@ -77,7 +79,10 @@ extension SumInputFieldFormatter : UITextFieldDelegate {
 		let newText = nsString
 			.replacingCharacters(in: range, with: string)
 		
-		return self.number(from: newText) != nil || newText == ""
+		let oldLength = textField.text?.count ?? 0
+		let overflow = newText.count > self.maximumLength && newText.count > oldLength
+		
+		return !overflow && (self.number(from: newText) != nil || newText == "")
 	}
 }
 

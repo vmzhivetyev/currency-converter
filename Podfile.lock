@@ -1,16 +1,20 @@
 PODS:
   - Masonry (1.1.0)
+  - SwiftyXMLParser (4.3.0)
 
 DEPENDENCIES:
   - Masonry
+  - SwiftyXMLParser
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Masonry
+    - SwiftyXMLParser
 
 SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  SwiftyXMLParser: b2e0b0dd0e0fb1ac39869dd4a0c6181847af2945
 
-PODFILE CHECKSUM: 630d86daf72d83b784a710a54664728e2d5d366c
+PODFILE CHECKSUM: 258186875392ddca1f6fc4a26893671825b1e381
 
 COCOAPODS: 1.5.3

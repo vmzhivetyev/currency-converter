@@ -14,6 +14,7 @@ class CurrencyInputView : UIView {
 	
 	struct Currency {
 		let code: String
+		let name: String
 	}
 	
 	weak var delegate: CurrencyInputViewDelegate?
@@ -70,6 +71,12 @@ class CurrencyInputView : UIView {
 		
 		self.currencyCodeTextField.inputView = self.currencyPickerView
 		self.currencyCodeTextField.tintColor = .clear
+		self.currencyCodeTextField.font = UIFont.preferredFont(forTextStyle: .title1)
+		self.currencyCodeTextField.delegate = self
+		
+		self.sumTextField.font = UIFont.preferredFont(forTextStyle: .title1)
+		self.sumTextField.adjustsFontSizeToFitWidth = true
+		self.sumTextField.textAlignment = .right
 
 		self.addSubview(self.sumTextField)
 		self.addSubview(self.currencyCodeTextField)
@@ -77,13 +84,14 @@ class CurrencyInputView : UIView {
 	
 	func setupConstraints() {
 		self.sumTextField.mas_makeConstraints { (make) in
-			make?.bottom.left()?.top()?.equalTo()(self)
-			make?.right.equalTo()(self.currencyCodeTextField.mas_left)
+			make?.left.bottom().top()?.equalTo()(self)
+			make?.right.equalTo()(self.currencyCodeTextField.mas_left)?.inset()(10)
 		}
 		
 		self.currencyCodeTextField.mas_makeConstraints { (make) in
-			make?.top.right()?.bottom()?.equalTo()(self)
-			make?.width.equalTo()(70)
+			make?.top.right()?.equalTo()(self)
+			make?.width.equalTo()(60)
+			make?.bottom.equalTo()(self.sumTextField.mas_bottom)
 		}
 	}
 	
@@ -92,18 +100,18 @@ class CurrencyInputView : UIView {
 	}
 	
 	private func displaySelectedCurrency() {
-		self.currencyCodeTextField.text = selectedCurrency?.code ?? "..."
+		self.currencyCodeTextField.text = self.selectedCurrency?.code ?? "..."
 	}
 	
-	private func selectCurrency(at index: Int) {
+	func selectCurrency(at index: Int) {
 		if index < self.currencies.count {
-			self.currencyPickerView.selectRow(index, inComponent: 0, animated: true)
+			self.currencyPickerView.selectRow(Int(index), inComponent: 0, animated: true)
 		}
 		self.displaySelectedCurrency()
 	}
 }
 
-extension CurrencyInputView: UIPickerViewDataSource {
+extension CurrencyInputView : UIPickerViewDataSource {
 	func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 1
 	}
@@ -113,9 +121,10 @@ extension CurrencyInputView: UIPickerViewDataSource {
 	}
 }
 
-extension CurrencyInputView: UIPickerViewDelegate {
+extension CurrencyInputView : UIPickerViewDelegate {
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-		return self.currencies[row].code
+		let currency = self.currencies[row]
+		return "\(currency.code) - \(currency.name)"
 	}
 	
 	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -124,7 +133,13 @@ extension CurrencyInputView: UIPickerViewDelegate {
 	}
 }
 
-extension CurrencyInputView: SumInputFieldFormatterDelegate {
+extension CurrencyInputView : UITextFieldDelegate {
+	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		return false
+	}
+}
+
+extension CurrencyInputView : SumInputFieldFormatterDelegate {
 	func sumInputFieldFormatter(_ sumInputFieldFormatter: SumInputFieldFormatter, didChange value: Decimal) {
 		self.delegate?.currencyInputView(self, didChange: value)
 	}

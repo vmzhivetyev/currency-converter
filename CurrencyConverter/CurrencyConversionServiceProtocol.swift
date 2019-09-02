@@ -1,5 +1,5 @@
 //
-//  CurrencyConverterViewControllerOutput.swift
+//  CurrencyConversionServiceProtocol.swift
 //  CurrencyConverter
 //
 //  Created by Вячеслав Живетьев on 01/09/2019.
@@ -8,7 +8,8 @@
 
 import UIKit
 
-protocol CurrencyConverterViewControllerOutput: class {
-	func didLoadView()
-	func requestConversion(data: CurrencyConverterViewData)
+protocol CurrencyConversionServiceProtocol {
+	func fetchCurrencies()
+	
+	func convert(data: CurrencyConversionService.CurrencyConversionData)
 }

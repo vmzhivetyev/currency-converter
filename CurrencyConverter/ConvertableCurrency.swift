@@ -1,5 +1,5 @@
 //
-//  CurrencyConverterViewControllerOutput.swift
+//  ConvertableCurrency.swift
 //  CurrencyConverter
 //
 //  Created by Вячеслав Живетьев on 01/09/2019.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CurrencyConverterViewControllerOutput: class {
-	func didLoadView()
-	func requestConversion(data: CurrencyConverterViewData)
+struct ConvertableCurrency {
+	let isoCode : String
+	let name : String
 }

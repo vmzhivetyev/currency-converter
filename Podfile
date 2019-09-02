@@ -7,6 +7,7 @@ target 'CurrencyConverter' do
 
   # Pods for CurrencyConverter
   pod 'Masonry'
+  pod 'SwiftyXMLParser'
 
   target 'CurrencyConverterTests' do
     inherit! :search_paths

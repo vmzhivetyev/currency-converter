@@ -9,10 +9,10 @@
 import UIKit
 
 struct CurrencyConverterViewData {
-	let date: Date
-	let firstSum: Decimal
-	let firstCurrency: CurrencyInputView.Currency?
-	let secondSum: Decimal
-	let secondCurrency: CurrencyInputView.Currency?
-	let conversionDirectioin: CurrencyConverterViewController.ConversionDirection
+	var date: Date
+	var firstSum: Decimal
+	var firstCurrency: CurrencyInputView.Currency?
+	var secondSum: Decimal
+	var secondCurrency: CurrencyInputView.Currency?
+	var conversionDirection: CurrencyConverterViewController.ConversionDirection
 }

@@ -43,6 +43,7 @@ class DatePickerView: UIView {
 	let label = UILabel()
 	let textField = UITextField()
 	let datePicker = UIDatePicker()
+	let underline = UIView()
 	
 	let dateFormatter : DateFormatter = {
 		let formatter = DateFormatter()
@@ -71,27 +72,43 @@ class DatePickerView: UIView {
 	}
 	
 	func setupUI() {
-		self.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-		self.label.text = "Дата"
+		self.underline.backgroundColor = UIColor(white: 0, alpha: 0.3)
 		
-		self.textField.placeholder = "Выберите дату"
+		self.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+		self.label.text = "Выберите дату курса валют"
+		self.label.font = UIFont.preferredFont(forTextStyle: .caption1)
+		self.label.textAlignment = .right
+		
 		self.textField.tintColor = .clear
 		self.textField.textAlignment = .right
 		self.textField.inputView = self.datePicker
+		self.textField.delegate = self
+		self.textField.font = UIFont.preferredFont(forTextStyle: .title1)
+		
+		self.datePicker.datePickerMode = .date
 		self.datePicker.addTarget(self, action: #selector(datePickerValueDidChange(_:)), for: .valueChanged)
 		
 		self.addSubview(self.label)
 		self.addSubview(self.textField)
+		self.addSubview(self.underline)
 	}
 	
 	func setupConstraints() {
 		self.label.mas_makeConstraints { (make) in
-			make?.bottom.left()?.top()?.equalTo()(self)
-			make?.right.equalTo()(self.textField.mas_left)
+//			make?.bottom.left()?.top()?.equalTo()(self)
+//			make?.right.equalTo()(self.textField.mas_left)
+			make?.left.right()?.equalTo()(self)
+			make?.bottom.equalTo()(self)?.inset()(5)
+			make?.top.equalTo()(self.textField.mas_bottom)?.inset()(0)
 		}
 		
 		self.textField.mas_makeConstraints { (make) in
-			make?.top.right()?.bottom()?.equalTo()(self)
+			make?.top.left().right()?.equalTo()(self)
+		}
+		
+		self.underline.mas_makeConstraints { (make) in
+			make?.left.bottom()?.right()?.equalTo()(self)
+			make?.height.equalTo()(0.5)
 		}
 	}
 	
@@ -102,5 +119,11 @@ class DatePickerView: UIView {
 	@objc func datePickerValueDidChange(_ datePicker: UIDatePicker) {
 		self.displaySelectedDate()
 		self.delegate?.datePickerView(self, didPick: self.pickedDate)
+	}
+}
+
+extension DatePickerView : UITextFieldDelegate {
+	func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+		return false
 	}
 }
