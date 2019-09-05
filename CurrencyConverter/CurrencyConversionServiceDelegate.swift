@@ -10,7 +10,7 @@ import Foundation
 
 protocol CurrencyConversionServiceDelegate: class {
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
-								   didFetch currencies: [CurrencyConversionService.Currency])
+								   didFetch currencies: [ConvertableCurrency])
 
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
 								   didConvert resultSum: Decimal)

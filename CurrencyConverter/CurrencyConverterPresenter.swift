@@ -14,7 +14,8 @@ class CurrencyConverterPresenter {
 		case RUB, USD, EUR
 	}
 
-	weak var output: CurrencyConverterPresenterOutput?
+	weak var view: CurrencyConverterViewInput?
+	weak var moduleOutput: CurrencyConverterModuleOutput?
 
 	private let conversionService: CurrencyConversionServiceProtocol
 
@@ -31,16 +32,20 @@ class CurrencyConverterPresenter {
 	}
 }
 
+extension CurrencyConverterPresenter: CurrencyConverterModuleInput {
+	
+}
+
 extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 	func didLoadView() {
 		self.conversionService.fetchCurrencies()
-		self.output?.showLoading(true)
+		self.view?.showLoading(true)
 		
 		let currentDate = Date()
 		let minDate = DateComponents(calendar: Calendar.current,
 									 timeZone: TimeZone.current,
 									 year: 1991, month: 1, day: 1).date!
-		self.output?.showDate(picked: currentDate, minimum: minDate, maximum: currentDate)
+		self.view?.showDate(picked: currentDate, minimum: minDate, maximum: currentDate)
 	}
 
 	func requestConversion(data: CurrencyConverterViewData) {
@@ -52,14 +57,14 @@ extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 
 		self.lastRequestData = data
 
-		let firstCurrency = CurrencyConversionService.Currency(isoCode: dataFirstCurrency.code,
-															   name: dataFirstCurrency.name)
-		let secondCurrency = CurrencyConversionService.Currency(isoCode: dataSecondCurrency.code,
-																name: dataSecondCurrency.name)
+		let firstCurrency = ConvertableCurrency(isoCode: dataFirstCurrency.code,
+												name: dataFirstCurrency.name)
+		let secondCurrency = ConvertableCurrency(isoCode: dataSecondCurrency.code,
+												 name: dataSecondCurrency.name)
 
 		let isForward = data.conversionDirection == .forward
 
-		let conversionData = CurrencyConversionService.CurrencyConversionData(
+		let conversionData = CurrencyConversionData(
 			date: data.date,
 			sum: isForward ? data.firstSum : data.secondSum,
 			fromCurrency: isForward ? firstCurrency : secondCurrency,
@@ -70,7 +75,7 @@ extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 
 extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
-								   didFetch currencies: [CurrencyConversionService.Currency]) {
+								   didFetch currencies: [ConvertableCurrency]) {
 		// Автоповтор запроса списка валют каждую секунду, если он падает
 		if currencies.count <= 1 {
 			self.retryRequest { [weak self] in
@@ -80,20 +85,20 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 		}
 		
 		let currenciesForView = currencies.map { CurrencyInputView.Currency(code: $0.isoCode, name: $0.name) }
-		self.output?.showCurrenciesList(currenciesForView)
+		self.view?.showCurrenciesList(currenciesForView)
 
 		guard
 			let indexOfRUB = currenciesForView.firstIndex(where: { $0.code == KnownCurrencyISO.RUB.rawValue }),
 			let indexOfUSD = currenciesForView.firstIndex(where: { $0.code == KnownCurrencyISO.USD.rawValue })
 			else {
-				self.output?.selectCurrencies(firstIndex: 0, secondIndex: 3)
-				self.output?.showConversion(of: 1, conversionDirection: .forward)
-				self.output?.showLoading(false)
+				self.view?.selectCurrencies(firstIndex: 0, secondIndex: 3)
+				self.view?.showConversion(of: 1, conversionDirection: .forward)
+				self.view?.showLoading(false)
 				return
 		}
-		self.output?.selectCurrencies(firstIndex: indexOfUSD, secondIndex: indexOfRUB)
-		self.output?.showConversion(of: 1, conversionDirection: .forward)
-		self.output?.showLoading(false)
+		self.view?.selectCurrencies(firstIndex: indexOfUSD, secondIndex: indexOfRUB)
+		self.view?.showConversion(of: 1, conversionDirection: .forward)
+		self.view?.showLoading(false)
 	}
 
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol, didConvert resultSum: Decimal) {
@@ -105,15 +110,15 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 		} else {
 			result.firstSum = resultSum
 		}
-		self.output?.showSumAfterConversion(data: result)
+		self.view?.showSumAfterConversion(data: result)
 	}
 
 	func currencyConversionService(_ service: CurrencyConversionServiceProtocol,
 								   conversionFailedWith error: CurrencyConversionError) {
 		if case .exchangeRateUnavailable = error {
-			self.output?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
+			self.view?.showError(text: UIStringsProvider.shared.exchangeRateUnavailable)
 		} else {
-			self.output?.showError(text: UIStringsProvider.shared.requestError)
+			self.view?.showError(text: UIStringsProvider.shared.requestError)
 			// Запрос упал, пробуем еще раз
 			self.retryRequest { [weak self] in
 				guard let data = self?.lastRequestData else {

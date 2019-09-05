@@ -9,9 +9,12 @@
 import UIKit
 
 protocol CBRServiceDelegate: class {
-	func cbrService(_ cbrService: CBRService, didFetch currencies: [CBRService.Currency])
-	func cbrService(_ cbrService: CBRService,
+	func cbrService(_ cbrService: CBRServiceProtocol,
+					didFetch currencies: [CBRCurrency])
+	
+	func cbrService(_ cbrService: CBRServiceProtocol,
 					didFetch value: Decimal,
-					for currency: CBRService.Currency,
-					error: CBRService.CBRError?)
+					for currency: CBRCurrency,
+					date: Date,
+					error: CBRError?)
 }

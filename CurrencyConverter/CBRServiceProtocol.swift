@@ -10,5 +10,5 @@ import Foundation
 
 protocol CBRServiceProtocol {
 	func fetchCurrenciesList()
-	func fetchCurrencyValue(_ currency: CBRService.Currency, date: Date) -> URLSessionDataTask?
+	func fetchCurrencyValue(_ currency: CBRCurrency, date: Date) -> URLSessionDataTask?
 }

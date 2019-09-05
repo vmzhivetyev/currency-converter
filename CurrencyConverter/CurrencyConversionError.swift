@@ -10,6 +10,5 @@ import UIKit
 
 enum CurrencyConversionError: Error {
 	case exchangeRateUnavailable
-	case unexpectedBehaviour
 	case requestError
 }

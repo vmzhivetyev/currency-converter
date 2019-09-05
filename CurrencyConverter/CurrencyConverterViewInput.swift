@@ -1,5 +1,5 @@
 //
-//  CurrencyConverterInteractorOutput.swift
+//  CurrencyConverterViewInput.swift
 //  CurrencyConverter
 //
 //  Created by Вячеслав Живетьев on 01/09/2019.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol CurrencyConverterPresenterOutput: class {
+protocol CurrencyConverterViewInput: class {
 	func showDate(picked: Date, minimum: Date, maximum: Date)
 	func showCurrenciesList(_ list: [CurrencyInputView.Currency])
 	func showSumAfterConversion(data: CurrencyConverterViewData)

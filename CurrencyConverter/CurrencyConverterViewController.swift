@@ -9,13 +9,13 @@
 import UIKit
 import Masonry
 
-class CurrencyConverterViewController: UIViewController {
+class CurrencyConverterViewController: CurrencyConverterUIModule {
 
 	enum ConversionDirection {
 		case forward, backward
 	}
-
-	var output: CurrencyConverterViewControllerOutput?
+	
+	let presenter: CurrencyConverterViewControllerOutput
 
 	let datePickerView = DatePickerView()
 
@@ -26,6 +26,16 @@ class CurrencyConverterViewController: UIViewController {
 	let loadingView = LoadingView()
 
 	private var lastConversionDirection: ConversionDirection = .forward
+	
+	init(presenter: CurrencyConverterViewControllerOutput, moduleInput: ModuleInput) {
+		self.presenter = presenter
+		
+		super.init(moduleInput: moduleInput)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,7 +44,7 @@ class CurrencyConverterViewController: UIViewController {
 		self.setupGestureRecognizer()
 		self.setupConstraints()
 
-		self.output?.didLoadView()
+		self.presenter.didLoadView()
 	}
 
 	func setupUI() {
@@ -110,7 +120,7 @@ class CurrencyConverterViewController: UIViewController {
 		self.lastConversionDirection = conversionDirection
 		self.animateUI(finished: false)
 		self.messageLabel.text = nil
-		self.output?.requestConversion(data: data)
+		self.presenter.requestConversion(data: data)
 	}
 
 	func conversionDirection(for currencyInputView: CurrencyInputView) -> ConversionDirection {
@@ -127,7 +137,7 @@ class CurrencyConverterViewController: UIViewController {
 	}
 }
 
-extension CurrencyConverterViewController: CurrencyConverterPresenterOutput {
+extension CurrencyConverterViewController: CurrencyConverterViewInput {
 	func showDate(picked: Date, minimum: Date, maximum: Date) {
 		self.datePickerView.pickedDate = picked
 		self.datePickerView.minimumDate = minimum

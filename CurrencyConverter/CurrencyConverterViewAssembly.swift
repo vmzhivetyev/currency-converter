@@ -9,8 +9,7 @@
 import UIKit
 
 class CurrencyConverterViewAssembly {
-	func createViewController() -> UIViewController {
-		let viewController = CurrencyConverterViewController()
+	func createModule(output: CurrencyConverterModuleOutput) -> CurrencyConverterUIModule {
 
 		let cbrService = CBRService()
 		let conversionService = CurrencyConversionService(cbrService: cbrService)
@@ -18,9 +17,10 @@ class CurrencyConverterViewAssembly {
 
 		let presenter = CurrencyConverterPresenter(currencyConversionService: conversionService)
 		conversionService.delegate = presenter
-
-		viewController.output = presenter
-		presenter.output = viewController
+		
+		let viewController = CurrencyConverterViewController(presenter: presenter, moduleInput: presenter)
+		presenter.view = viewController
+		presenter.moduleOutput = output
 
 		return viewController
 	}

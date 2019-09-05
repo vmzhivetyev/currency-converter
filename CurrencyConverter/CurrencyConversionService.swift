@@ -10,34 +10,28 @@ import UIKit
 
 class CurrencyConversionService {
 
-	struct Currency {
-		let isoCode: String
-		let name: String
-	}
-
-	struct CurrencyConversionData {
-		let date: Date
-		let sum: Decimal
-		let fromCurrency: Currency
-		let toCurrency: Currency
-	}
-
-	private struct ConversionResult {
+	private class ConversionResult {
+		
 		var fromCurrencyValue: Decimal = -1
 		var toCurrencyValue: Decimal = -1
-
-		var ratio: Decimal {
-			guard self.isFilled else {
-				return -1
+		let conversionData: CurrencyConversionData
+		
+		init(conversionData: CurrencyConversionData) {
+			self.conversionData = conversionData
+		}
+		
+		var sum : Decimal? {
+			guard let ratio = self.ratio else {
+				return nil
 			}
-			guard toCurrencyValue != 0 else {
-				return 0
-			}
-			return fromCurrencyValue / toCurrencyValue
+			return self.conversionData.sum * ratio
 		}
 
-		private var isFilled: Bool {
-			return fromCurrencyValue >= 0 && toCurrencyValue >= 0
+		var ratio: Decimal? {
+			guard self.fromCurrencyValue > 0 && self.toCurrencyValue > 0 else {
+				return nil
+			}
+			return self.fromCurrencyValue / self.toCurrencyValue
 		}
 	}
 
@@ -45,9 +39,8 @@ class CurrencyConversionService {
 
 	private let cbrService: CBRServiceProtocol
 
-	private var currenciesList: [CBRService.Currency] = []
-	private var conversionData: CurrencyConversionData?
-	private var conversionResult = ConversionResult()
+	private var currenciesList: [CBRCurrency] = []
+	private var conversionResult: ConversionResult?
 	
 	private var dataTasksQueue = [URLSessionDataTask]()
 
@@ -74,9 +67,6 @@ extension CurrencyConversionService: CurrencyConversionServiceProtocol {
 	}
 
 	func convert(data: CurrencyConversionData) {
-		self.conversionData = data
-		self.conversionResult = ConversionResult()
-
 		guard
 			let fromCurrency = self.currenciesList.first(where: { $0.isoCode == data.fromCurrency.isoCode }),
 			let toCurrency = self.currenciesList.first(where: { $0.isoCode == data.toCurrency.isoCode })
@@ -88,6 +78,9 @@ extension CurrencyConversionService: CurrencyConversionServiceProtocol {
 			self.delegate?.currencyConversionService(self, didConvert: data.sum)
 			return
 		}
+		
+		self.conversionResult = ConversionResult(conversionData: data)
+
 		self.cancelPreviousCurrencyValueDataTasks()
 		let task1 = self.cbrService.fetchCurrencyValue(fromCurrency, date: data.date)
 		let task2 = self.cbrService.fetchCurrencyValue(toCurrency, date: data.date)
@@ -97,42 +90,47 @@ extension CurrencyConversionService: CurrencyConversionServiceProtocol {
 }
 
 extension CurrencyConversionService: CBRServiceDelegate {
-	func cbrService(_ cbrService: CBRService, didFetch currencies: [CBRService.Currency]) {
+	func cbrService(_ cbrService: CBRServiceProtocol, didFetch currencies: [CBRCurrency]) {
 		self.currenciesList = currencies
-		let list = currencies.map { CurrencyConversionService.Currency(isoCode: $0.isoCode, name: $0.name) }
+		let list = currencies.map { ConvertableCurrency(isoCode: $0.isoCode, name: $0.name) }
 		self.delegate?.currencyConversionService(self, didFetch: list)
 	}
 
-	func cbrService(_ cbrService: CBRService,
+	func cbrService(_ cbrService: CBRServiceProtocol,
 					didFetch value: Decimal,
-					for currency: CBRService.Currency,
-					error: CBRService.CBRError?) {
-		guard let data = self.conversionData else {
-			self.delegate?.currencyConversionService(self, conversionFailedWith: .unexpectedBehaviour)
+					for currency: CBRCurrency,
+					date: Date,
+					error: CBRError?) {
+		guard
+			let result = self.conversionResult,
+			date == result.conversionData.date else {
+				return
+		}
+		
+		switch currency.isoCode {
+		case result.conversionData.fromCurrency.isoCode:
+			result.fromCurrencyValue = value
+		case result.conversionData.toCurrency.isoCode:
+			result.toCurrencyValue = value
+		default:
 			return
 		}
-
-		if currency.isoCode == data.fromCurrency.isoCode {
-			self.conversionResult.fromCurrencyValue = value
-		}
-		if currency.isoCode == data.toCurrency.isoCode {
-			self.conversionResult.toCurrencyValue = value
-		}
-
-		let ratio = self.conversionResult.ratio
-		guard ratio >= 0 else {
+		
+		if value <= 0 {
+			self.delegate?.currencyConversionService(self, conversionFailedWith: .exchangeRateUnavailable)
+			self.conversionResult = nil
 			return
 		}
-
-		if ratio > 0 {
-			let result = data.sum * ratio
-			self.delegate?.currencyConversionService(self, didConvert: result)
-		} else {
-			if error == .conversionRateUnavailable {
-				self.delegate?.currencyConversionService(self, conversionFailedWith: .exchangeRateUnavailable)
-			} else {
-				self.delegate?.currencyConversionService(self, conversionFailedWith: .requestError)
-			}
+		
+		if error != nil {
+			self.delegate?.currencyConversionService(self, conversionFailedWith: .requestError)
+			self.conversionResult = nil
+			return
+		}
+		
+		if let resultSum = result.sum {
+			self.delegate?.currencyConversionService(self, didConvert: resultSum)
+			self.conversionResult = nil
 		}
 	}
 }

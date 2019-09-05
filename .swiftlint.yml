@@ -49,8 +49,8 @@ number_separator:
   minimum_length: 5
 
 cyclomatic_complexity:
-  warning: 5
-  error: 6
+  warning: 7
+  error: 8
 
 force_cast: error
 force_try: error

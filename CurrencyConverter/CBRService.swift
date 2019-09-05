@@ -10,11 +10,6 @@ import Foundation
 import SwiftyXMLParser
 
 class CBRService {
-	enum CBRError: Error {
-		case unableToCreateURL
-		case conversionRateUnavailable
-		case requestError
-	}
 
 	private enum CBRURL: String {
 		static let host = "https://www.cbr.ru"
@@ -22,26 +17,13 @@ class CBRService {
 		case currenciesList = "scripts/XML_valFull.asp"
 		case currencyValue = "scripts/XML_dynamic.asp"
 	}
-
-	struct Currency: Equatable {
-		let id: String
-		let isoCode: String
-		let name: String
-		let engName: String?
-		let nominal: String?
-		let parentCode: String?
-
-		static func == (lhs: Currency, rhs: Currency) -> Bool {
-			return lhs.isoCode == rhs.isoCode
-		}
-	}
-
-	static let rubCurrency = Currency(id: "",
-									  isoCode: "RUB",
-									  name: "Российский рубль",
-									  engName: "Russian ruble",
-									  nominal: "1",
-									  parentCode: "")
+	
+	static let rubCurrency = CBRCurrency(id: "",
+										 isoCode: "RUB",
+										 name: "Российский рубль",
+										 engName: "Russian ruble",
+										 nominal: "1",
+										 parentCode: "")
 
 	weak var delegate: CBRServiceDelegate?
 
@@ -56,7 +38,7 @@ class CBRService {
 	
 	private var cache = [String: Decimal]()
 	
-	func cacheKey(_ currency: Currency, _ date: Date) -> String {
+	func cacheKey(_ currency: CBRCurrency, _ date: Date) -> String {
 		let dateStr = self.dateFormatter.string(from: date)
 		return "\(currency.isoCode) \(dateStr)"
 	}
@@ -68,6 +50,7 @@ class CBRService {
 		return urlComponents?.url
 	}
 
+	@discardableResult
 	private func xmlFromUrl(_ cbrURL: CBRURL,
 							parameters: [String: String],
 							completion: @escaping (XML.Accessor?, Error?) -> Void) -> URLSessionDataTask? {
@@ -97,14 +80,14 @@ class CBRService {
 
 extension CBRService: CBRServiceProtocol {
 	func fetchCurrenciesList() {
-		_ = self.xmlFromUrl(.currenciesList, parameters: [:]) { (xmlOpt, _) in
+		self.xmlFromUrl(.currenciesList, parameters: [:]) { (xmlOpt, _) in
 			guard let xml = xmlOpt else {
 				DispatchQueue.main.async {
 					self.delegate?.cbrService(self, didFetch: [])
 				}
 				return
 			}
-			var list = xml["Valuta"]["Item"].compactMap { (item) -> Currency? in
+			var list = xml["Valuta"]["Item"].compactMap { (item) -> CBRCurrency? in
 				guard
 					let id = item.attributes["ID"]?.trimmingCharacters(in: .whitespaces),
 					let isoCode = item["ISO_Char_Code"].text?.trimmingCharacters(in: .whitespaces),
@@ -113,12 +96,12 @@ extension CBRService: CBRServiceProtocol {
 						return nil
 				}
 				
-				return Currency(id: id,
-								isoCode: isoCode,
-								name: name,
-								engName: item["EngName"].text?.trimmingCharacters(in: .whitespaces),
-								nominal: item["Nominal"].text?.trimmingCharacters(in: .whitespaces),
-								parentCode: item["ParentCode"].text?.trimmingCharacters(in: .whitespaces))
+				return CBRCurrency(id: id,
+								   isoCode: isoCode,
+								   name: name,
+								   engName: item["EngName"].text?.trimmingCharacters(in: .whitespaces),
+								   nominal: item["Nominal"].text?.trimmingCharacters(in: .whitespaces),
+								   parentCode: item["ParentCode"].text?.trimmingCharacters(in: .whitespaces))
 			}
 			list.append(CBRService.rubCurrency)
 			list.sort(by: { $0.isoCode < $1.isoCode })
@@ -139,9 +122,9 @@ extension CBRService: CBRServiceProtocol {
 	/// - Parameters:
 	///   - currency: Валюта для получения ее стоимости в рублях
 	///   - date: Дата курса валюты
-	func fetchCurrencyValue(_ currency: CBRService.Currency, date: Date) -> URLSessionDataTask? {
+	func fetchCurrencyValue(_ currency: CBRCurrency, date: Date) -> URLSessionDataTask? {
 		if currency == CBRService.rubCurrency {
-			self.delegate?.cbrService(self, didFetch: 1, for: currency, error: nil)
+			self.delegate?.cbrService(self, didFetch: 1, for: currency, date: date, error: nil)
 			return nil
 		}
 
@@ -151,7 +134,7 @@ extension CBRService: CBRServiceProtocol {
 		let secondDate = self.dateFormatter.string(from: date)
 
 		if let cachedValue = self.cache[self.cacheKey(currency, date)] {
-			self.delegate?.cbrService(self, didFetch: cachedValue, for: currency, error: nil)
+			self.delegate?.cbrService(self, didFetch: cachedValue, for: currency, date: date, error: nil)
 			return nil
 		}
 
@@ -172,14 +155,19 @@ extension CBRService: CBRServiceProtocol {
 						self.delegate?.cbrService(self,
 												  didFetch: 0,
 												  for: currency,
+												  date: date,
 												  error: xmlOpt != nil ? .conversionRateUnavailable : .requestError)
 					}
 					return
 			}
+			let result = decimalValue / decimalNominal
+			self.cache[self.cacheKey(currency, date)] = result
 			DispatchQueue.main.async {
-				let result = decimalValue / decimalNominal
-				self.cache[self.cacheKey(currency, date)] = result
-				self.delegate?.cbrService(self, didFetch: result, for: currency, error: nil)
+				self.delegate?.cbrService(self,
+										  didFetch: result,
+										  for: currency,
+										  date: date,
+										  error: nil)
 			}
 		}
 	}
