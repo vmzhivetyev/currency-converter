@@ -17,7 +17,7 @@ class CurrencyConverterViewAssembly {
 
 		let presenter = CurrencyConverterPresenter(currencyConversionService: conversionService)
 		conversionService.delegate = presenter
-		
+
 		let viewController = CurrencyConverterViewController(presenter: presenter, moduleInput: presenter)
 		presenter.view = viewController
 		presenter.moduleOutput = output

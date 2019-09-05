@@ -17,7 +17,7 @@ class CBRService {
 		case currenciesList = "scripts/XML_valFull.asp"
 		case currencyValue = "scripts/XML_dynamic.asp"
 	}
-	
+
 	static let rubCurrency = CBRCurrency(id: "",
 										 isoCode: "RUB",
 										 name: "Российский рубль",
@@ -28,6 +28,7 @@ class CBRService {
 	weak var delegate: CBRServiceDelegate?
 
 	private let urlSession = URLSession.shared
+	// swiftlint:disable:next force_unwrapping
 	private let baseURL = URL(string: CBRURL.host)!
 
 	private let dateFormatter: DateFormatter = {
@@ -35,9 +36,9 @@ class CBRService {
 		formatter.dateFormat = "dd/MM/yyyy"
 		return formatter
 	}()
-	
+
 	private var cache = [String: Decimal]()
-	
+
 	func cacheKey(_ currency: CBRCurrency, _ date: Date) -> String {
 		let dateStr = self.dateFormatter.string(from: date)
 		return "\(currency.isoCode) \(dateStr)"
@@ -95,7 +96,7 @@ extension CBRService: CBRServiceProtocol {
 					else {
 						return nil
 				}
-				
+
 				return CBRCurrency(id: id,
 								   isoCode: isoCode,
 								   name: name,
@@ -110,7 +111,7 @@ extension CBRService: CBRServiceProtocol {
 			}
 		}
 	}
-	
+
 	///
 	/// Запрашиваем последний известный курс валюты за все десять дней до необходимой даты.
 	///

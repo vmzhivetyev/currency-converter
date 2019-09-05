@@ -9,9 +9,9 @@
 import UIKit
 
 class Coordinator: NSObject {
-	
+
 	let currencyConverterViewAssembly = CurrencyConverterViewAssembly()
-	
+
 	func rootViewController() -> UIViewController {
 		let module = self.currencyConverterViewAssembly.createModule(output: self)
 		let rootViewController = UINavigationController(rootViewController: module)
@@ -20,5 +20,5 @@ class Coordinator: NSObject {
 }
 
 extension Coordinator: CurrencyConverterModuleOutput {
-	
+
 }

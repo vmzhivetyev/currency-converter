@@ -11,16 +11,16 @@ import UIKit
 class CurrencyConversionService {
 
 	private class ConversionResult {
-		
+
 		var fromCurrencyValue: Decimal = -1
 		var toCurrencyValue: Decimal = -1
 		let conversionData: CurrencyConversionData
-		
+
 		init(conversionData: CurrencyConversionData) {
 			self.conversionData = conversionData
 		}
-		
-		var sum : Decimal? {
+
+		var sum: Decimal? {
 			guard let ratio = self.ratio else {
 				return nil
 			}
@@ -41,18 +41,18 @@ class CurrencyConversionService {
 
 	private var currenciesList: [CBRCurrency] = []
 	private var conversionResult: ConversionResult?
-	
+
 	private var dataTasksQueue = [URLSessionDataTask]()
 
 	init(cbrService: CBRServiceProtocol) {
 		self.cbrService = cbrService
 	}
-	
+
 	func cancelPreviousCurrencyValueDataTasks() {
 		self.dataTasksQueue.forEach { $0.cancel() }
 		self.dataTasksQueue.removeAll()
 	}
-	
+
 	func enqueueCurrencyValueDataTask(_ dataTask: URLSessionDataTask?) {
 		guard let task = dataTask else {
 			return
@@ -78,7 +78,7 @@ extension CurrencyConversionService: CurrencyConversionServiceProtocol {
 			self.delegate?.currencyConversionService(self, didConvert: data.sum)
 			return
 		}
-		
+
 		self.conversionResult = ConversionResult(conversionData: data)
 
 		self.cancelPreviousCurrencyValueDataTasks()
@@ -106,7 +106,7 @@ extension CurrencyConversionService: CBRServiceDelegate {
 			date == result.conversionData.date else {
 				return
 		}
-		
+
 		switch currency.isoCode {
 		case result.conversionData.fromCurrency.isoCode:
 			result.fromCurrencyValue = value
@@ -115,19 +115,19 @@ extension CurrencyConversionService: CBRServiceDelegate {
 		default:
 			return
 		}
-		
+
 		if value <= 0 {
 			self.delegate?.currencyConversionService(self, conversionFailedWith: .exchangeRateUnavailable)
 			self.conversionResult = nil
 			return
 		}
-		
+
 		if error != nil {
 			self.delegate?.currencyConversionService(self, conversionFailedWith: .requestError)
 			self.conversionResult = nil
 			return
 		}
-		
+
 		if let resultSum = result.sum {
 			self.delegate?.currencyConversionService(self, didConvert: resultSum)
 			self.conversionResult = nil

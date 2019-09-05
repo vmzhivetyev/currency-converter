@@ -1,5 +1,5 @@
 //
-//  CurrencyFormatter.swift
+//  SumInputFieldFormatter.swift
 //  CurrencyConverter
 //
 //  Created by Вячеслав Живетьев on 01/09/2019.
@@ -85,13 +85,14 @@ extension SumInputFieldFormatter: UITextFieldDelegate {
 		/// Запрещаем ввод, если длина будет увеличена больше лимита
 		let overflow = newText.count > self.maximumLength && newText.count > oldLength
 		let newTextIsNumberOrEmpty = self.number(from: newText) != nil || newText == ""
-		
+
 		return !overflow && newTextIsNumberOrEmpty
 	}
 }
 
 extension SumInputFieldFormatter {
-	@objc func textDidChange(_ textInput: UITextInput?) {
+	@objc
+	func textDidChange(_ textInput: UITextInput?) {
 		self.delegate?.sumInputFieldFormatter(self, didChange: self.sumValue)
 	}
 }

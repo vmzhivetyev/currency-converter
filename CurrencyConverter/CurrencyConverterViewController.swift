@@ -14,7 +14,7 @@ class CurrencyConverterViewController: CurrencyConverterUIModule {
 	enum ConversionDirection {
 		case forward, backward
 	}
-	
+
 	let presenter: CurrencyConverterViewControllerOutput
 
 	let datePickerView = DatePickerView()
@@ -26,13 +26,13 @@ class CurrencyConverterViewController: CurrencyConverterUIModule {
 	let loadingView = LoadingView()
 
 	private var lastConversionDirection: ConversionDirection = .forward
-	
+
 	init(presenter: CurrencyConverterViewControllerOutput, moduleInput: ModuleInput) {
 		self.presenter = presenter
-		
+
 		super.init(moduleInput: moduleInput)
 	}
-	
+
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
@@ -143,7 +143,7 @@ extension CurrencyConverterViewController: CurrencyConverterViewInput {
 		self.datePickerView.minimumDate = minimum
 		self.datePickerView.maximumDate = maximum
 	}
-	
+
 	func showCurrenciesList(_ list: [CurrencyInputView.Currency]) {
 		self.firstCurrencyInputView.currencies = list
 		self.secondCurrencyInputView.currencies = list
@@ -185,7 +185,8 @@ extension CurrencyConverterViewController: CurrencyConverterViewInput {
 }
 
 extension CurrencyConverterViewController {
-	@objc func didTapGestureRecognizer(_ tapGestureRecognizer: UITapGestureRecognizer) {
+	@objc
+	func didTapGestureRecognizer(_ tapGestureRecognizer: UITapGestureRecognizer) {
 		self.view.endEditing(true)
 	}
 }

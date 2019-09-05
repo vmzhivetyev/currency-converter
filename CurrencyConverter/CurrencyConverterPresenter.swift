@@ -24,8 +24,8 @@ class CurrencyConverterPresenter {
 	init(currencyConversionService: CurrencyConversionServiceProtocol) {
 		self.conversionService = currencyConversionService
 	}
-	
-	func retryRequest(_ requestClosure: @escaping () -> ()) {
+
+	func retryRequest(_ requestClosure: @escaping () -> Void) {
 		DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
 			requestClosure()
 		}
@@ -33,18 +33,20 @@ class CurrencyConverterPresenter {
 }
 
 extension CurrencyConverterPresenter: CurrencyConverterModuleInput {
-	
+
 }
 
 extension CurrencyConverterPresenter: CurrencyConverterViewControllerOutput {
 	func didLoadView() {
 		self.conversionService.fetchCurrencies()
 		self.view?.showLoading(true)
-		
+
 		let currentDate = Date()
-		let minDate = DateComponents(calendar: Calendar.current,
-									 timeZone: TimeZone.current,
-									 year: 1991, month: 1, day: 1).date!
+		guard let minDate = DateComponents(calendar: Calendar.current,
+										   timeZone: TimeZone.current,
+										   year: 1991, month: 1, day: 1).date else {
+											return
+		}
 		self.view?.showDate(picked: currentDate, minimum: minDate, maximum: currentDate)
 	}
 
@@ -83,7 +85,7 @@ extension CurrencyConverterPresenter: CurrencyConversionServiceDelegate {
 			}
 			return
 		}
-		
+
 		let currenciesForView = currencies.map { CurrencyInputView.Currency(code: $0.isoCode, name: $0.name) }
 		self.view?.showCurrenciesList(currenciesForView)
 

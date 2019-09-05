@@ -11,17 +11,17 @@ import UIKit
 class CurrencyConverterUIModule: UIViewController, UIModuleProtocol {
 	typealias ModuleInput = CurrencyConverterModuleInput
 	var moduleInput: ModuleInput
-	
+
 	init(moduleInput: ModuleInput) {
 		self.moduleInput = moduleInput
-		
+
 		super.init(nibName: nil, bundle: nil)
 	}
-	
+
 	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
 		fatalError("init(nibName:, bundle:) has not been implemented")
 	}
-	
+
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

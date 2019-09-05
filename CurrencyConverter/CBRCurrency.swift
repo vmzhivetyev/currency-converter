@@ -15,7 +15,7 @@ struct CBRCurrency: Equatable {
 	let engName: String?
 	let nominal: String?
 	let parentCode: String?
-	
+
 	static func == (lhs: CBRCurrency, rhs: CBRCurrency) -> Bool {
 		return lhs.isoCode == rhs.isoCode
 	}

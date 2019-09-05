@@ -11,7 +11,7 @@ import UIKit
 protocol CBRServiceDelegate: class {
 	func cbrService(_ cbrService: CBRServiceProtocol,
 					didFetch currencies: [CBRCurrency])
-	
+
 	func cbrService(_ cbrService: CBRServiceProtocol,
 					didFetch value: Decimal,
 					for currency: CBRCurrency,

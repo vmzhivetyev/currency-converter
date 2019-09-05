@@ -6,17 +6,16 @@ excluded:
   - build
 
 disabled_rules: # rule identifiers to exclude from running
-#  - cyclomatic_complexity
-  - trailing_whitespace
-  - vertical_whitespace
-  - void_return
-  - trailing_newline
+  # - trailing_whitespace
+  # - vertical_whitespace
+  # - void_return
+  # - trailing_newline
   - vertical_parameter_alignment
-  - attributes
+  # - attributes
 
 opt_in_rules:
   - empty_count
-#  - file_header
+  - file_header
   - explicit_init
   - closure_spacing
   - overridden_super_call
@@ -32,15 +31,17 @@ opt_in_rules:
   - prohibited_super_call
   - fatal_error_message
   - missing_docs
+  - force_unwrapping
 
 file_header:
+  severity: error
   required_pattern: |
                     \/\/
-                    \/\/  .*?\.swift
-                    \/\/  <Project Name>
+                    \/\/  SWIFTLINT_CURRENT_FILENAME
+                    \/\/  CurrencyConverter(Tests)?
                     \/\/
-                    \/\/  Created by .*? on \d{1,2}\/\d{1,2}\/\d{2}\.
-                    \/\/  Copyright © \d{4} <Author Name>\. All rights reserved\.
+                    \/\/  Created by Вячеслав Живетьев on \d{1,2}\/\d{1,2}\/\d{4}\.
+                    \/\/  Copyright © \d{4} Вячеслав Живетьев\. All rights reserved\.
                     \/\/
 
 line_length: 120
@@ -55,7 +56,7 @@ cyclomatic_complexity:
 force_cast: error
 force_try: error
 force_unwrapping: error
-variable_name:
+identifier_name:
   max_length:
     warning: 40
     error: 50
@@ -71,11 +72,13 @@ variable_name:
     - URL
 trailing_newline: error
 comma: error
-colon: error
+colon:
+  severity: error
 opening_brace: error
 empty_count: error
 legacy_constructor: error
-statement_position: error
+statement_position: 
+  severity: error
 legacy_constant: error
 trailing_semicolon: error
 

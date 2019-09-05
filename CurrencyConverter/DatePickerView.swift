@@ -71,7 +71,7 @@ class DatePickerView: UIView {
 	}
 
 	func setupUI() {
-		self.underline.backgroundColor = UIColor(white: 0, alpha: 0.3)
+		self.underline.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
 
 		self.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 		self.label.text = UIStringsProvider.shared.selectDateHint
@@ -113,7 +113,8 @@ class DatePickerView: UIView {
 		self.textField.text = self.dateFormatter.string(from: self.pickedDate)
 	}
 
-	@objc func datePickerValueDidChange(_ datePicker: UIDatePicker) {
+	@objc
+	func datePickerValueDidChange(_ datePicker: UIDatePicker) {
 		self.displaySelectedDate()
 		self.delegate?.datePickerView(self, didPick: self.pickedDate)
 	}
